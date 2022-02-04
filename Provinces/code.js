@@ -7,7 +7,8 @@ function attemptCreateRoom() {
 }
 
 function attemptJoinRoom() {
-    roomCode = "1";
+    roomCode = document.getElementById("rcode").value;
+    roomCode = roomCode.toUpperCase();
     console.log("Attempted to join room with code " + roomCode);
 }
 
