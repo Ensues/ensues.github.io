@@ -1,5 +1,13 @@
+html {
+	height: 100%;
+	margin: auto;
+}
+
 body {
-	background-color:#55AAFF;
+	background-color:#225577;
+	height: 100%;
+	margin: auto;
+	
 }
 
 h1 {
@@ -18,6 +26,21 @@ p {
 }
 
 .gameButton {
-	width:150px;
-	height:100px;
+	width:315px;
+	height:75px;
+}
+
+.mainBody {
+	background-color: #3399CC;
+	width: 80%;
+	height: 90%;
+	
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	
+	border: 3px solid #2277AA;
+	padding: 10px;
 }
