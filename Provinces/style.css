@@ -1,0 +1,58 @@
+html {
+	height: 100%;
+	margin: auto;
+}
+
+body {
+	background-color:#449944;
+	height: 100%;
+	margin: auto;
+	
+}
+
+h1 {
+	text-align:center; 
+	font-family:'Courier New';
+}
+
+p {
+	text-align:center; 
+	font-family:'Courier New';
+}
+
+.buttonContainer {
+	display:block;
+	text-align:center;
+}
+
+.gameButton {
+	width:315px;
+	height:75px;
+}
+
+.mainBody {
+	background-color: #AAFFAA;
+	width: 80%;
+	height: 90%;
+	
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	
+	border: 3px solid #66AA66;
+	padding: 10px;
+}
+
+.runDown {
+	display:block;
+	text-align:left;
+	width:45%;
+	height:75%;
+	border: 3px solid #66AA66;
+	padding: 10px;
+	position: absolute;
+    left: 15;
+	bottom: 15;
+}
