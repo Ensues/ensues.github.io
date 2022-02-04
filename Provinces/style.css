@@ -13,21 +13,14 @@ body {
 h1 {
 	text-align:center; 
 	font-family:'Courier New';
-}
+	font-size: 50px;
+	color: #225522;
+} 
 
 p {
 	text-align:center; 
 	font-family:'Courier New';
-}
-
-.buttonContainer {
-	display:block;
-	text-align:center;
-}
-
-.gameButton {
-	width:315px;
-	height:75px;
+	color: #113311;
 }
 
 .mainBody {
@@ -46,13 +39,15 @@ p {
 }
 
 .runDown {
-	display:block;
-	text-align:left;
-	width:45%;
-	height:75%;
+	background-color: #99EE99;
+	
+	width:47%;
+	height:80%;
+	
 	border: 3px solid #66AA66;
 	padding: 10px;
+	
 	position: absolute;
-    left: 15;
-	bottom: 15;
+	top: 15%;
+	left: 1%;
 }
