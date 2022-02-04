@@ -54,5 +54,33 @@ p {
 
 .buttons {
 	position: absolute;
-	left: 90%;
+	left: 85%;
+}
+
+.button {
+	width: 150px;
+	display: inline-block;
+	border: 3px solid #66AA66;
+	background-color: #99EE99;
+	text-align:center; 
+	font-family:'Courier New';
+	color: #113311;
+	font-weight: bold;
+}
+
+.button:hover {
+	transition: 0.4s;
+	background-color: #AAFFAA;
+	border: 3px solid #77BB77;
+	cursor: pointer;
+}
+
+.button:active {
+	transition: 0s;
+	background-color: #55BB55;
+	border: 3px solid #227722;
+}
+
+.input {
+	width: 142px;
 }
