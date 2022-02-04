@@ -12,7 +12,12 @@ p {
 	font-family:'Courier New';
 }
 
+.buttonContainer {
+	display:block;
+	text-align:center;
+}
+
 .gameButton {
-	color: #FFFF00;
-	font-size: 40px
+	width:150px;
+	height:100px;
 }
