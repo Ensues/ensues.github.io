@@ -3,7 +3,7 @@ const xFOV = 11;
 const yFOV = 7;
 const mapSize = 500;
 var gameMap = [];
-var currentX, currentY;
+var currentX = 250, currentY = 250;
 var tileTypes = {};
 // {} = Dictionary [] = Array/List
 // var = local to functions, let = local to braces
@@ -56,7 +56,6 @@ Equals to but good ===
 
 // Initialize all of the div squares for the gameMap 
 function resetGrid() {
-	console.log("a");
 	const htmlGameMap = document.getElementById("gameMap");
 	const htmlPosX = htmlGameMap.getBoundingClientRect().left + 3;	// 3px border
 	const htmlPosY = htmlGameMap.getBoundingClientRect().top + 3;	// 3px border
@@ -72,6 +71,7 @@ function resetGrid() {
 			let img = document.createElement("img");
 			img.src = tileTypes[null].display;
 			img.setAttribute("style", `width:${tileWidth}px; height:${tileHeight}px;`);
+			img.classList.add("tile");
 			element.appendChild(img);
 			htmlGameMap.appendChild(element);
 		}
