@@ -1,0 +1,96 @@
+html {
+	height: 100%;
+	margin: auto;
+}
+
+body {
+	background-color:#449944;
+	height: 100%;
+	margin: auto;
+	
+}
+
+h1 {
+	text-align:center; 
+	font-family:'Courier New';
+	font-size: 50px;
+	color: #225522;
+} 
+
+p {
+	text-align:center; 
+	font-family:'Courier New';
+	color: #113311;
+}
+
+.mainBody {
+	background-color: #AAFFAA;
+	width: 80%;
+	height: 90%;
+	
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	
+	border: 3px solid #66AA66;
+	padding: 10px;
+}
+
+.runDown {
+	background-color: #99EE99;
+	
+	width:47%;
+	height:80%;
+	
+	border: 3px solid #66AA66;
+	padding: 10px;
+	
+	position: absolute;
+	top: 15%;
+	left: 1%;
+}
+
+.buttons {
+	position: absolute;
+	left: 50%;
+	width: 50%;
+	top: 15%;
+	text-align: center;
+}
+
+.button {
+	width: 90%;
+	padding-top: 5%;
+	padding-bottom: 5%;
+	display: inline-block;
+	border: 3px solid #66AA66;
+	background-color: #99EE99;
+	color: #113311;
+	font-weight: bold;
+	text-align:center; 
+	font-family:'Courier New';
+	font-size: 20px;
+}
+.button:hover {
+	transition: 0.4s;
+	background-color: #AAFFAA;
+	border: 3px solid #77BB77;
+	cursor: pointer;
+}
+.button:active {
+	transition: 0s;
+	background-color: #55BB55;
+	border: 3px solid #227722;
+}
+
+.input {
+	width: 89%;
+	padding-top: 2%;
+	padding-bottom: 2%;
+	border: 3px solid #000000;
+	text-align:center; 
+	font-family:'Courier New';
+	font-size: 20px;
+}
