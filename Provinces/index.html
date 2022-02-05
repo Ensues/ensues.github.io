@@ -1,12 +1,14 @@
 <!DOCTYPE html>
+<meta charset=UTF-8>
 
 <html>
 	<head>
 		<link rel="stylesheet" href="style.css">
+		<script src="lib/gameMap.js"></script>
 		<script src="script.js"></script>
 	</head>
 	
-	<body onload="load()" onresize="resetGrid()">
+	<body onload="onLoad()" onresize="onResize()">
 		
 		<div id="screenOrganizer">
 			<div class="gameMap" id="gameMap">
