@@ -6,6 +6,7 @@ async function preloadTiles() {
     tileTypes.WATER = new TileType("assets/tiles/water.png");
 
     buildingTypes.NOTHING = new BuildingType("assets/buildings/nothing.png");
+    buildingTypes.CAMPSITE = new BuildingType("assets/buildings/capital1.png");
 }
 
 class TileType {

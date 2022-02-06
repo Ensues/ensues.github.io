@@ -21,7 +21,7 @@ function newMap() {
 		gameMap[i] = Array(500).fill(new Tile(tileTypes.GRASS))
 	// Braces aren't required for loops/ifs with only one action. They can also be one line.
 
-	setLoc(new Tile(tileTypes.WATER),250,250);
+	setLoc(new Tile(tileTypes.GRASS,new Building(buildingTypes.CAMPSITE)),250,250);
 
 	redraw();
 }
