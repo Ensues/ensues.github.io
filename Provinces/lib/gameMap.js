@@ -1,27 +1,50 @@
 const mapSize = 500;
-const xFOV = 11;
-const yFOV = 7;
+var xFOV = 11;
+var yFOV = 7;
+var scrollAmnt = 1;
 var gameMap = [];
-var tileTypes = {};
 var currentX = 250, currentY = 250;
+var gameCanvas;
+var board;
 
-tileTypes[null] = {display: "assets/none.png"};
-tileTypes[undefined] = tileTypes[null];
-tileTypes["grass"] = {display: "assets/tiles/grass.png"};
-tileTypes["water"] = {display: "assets/tiles/water.png"};
-
+function gameMapPreload() {
+	gameCanvas = document.getElementById("gameCanvas");
+	board = gameCanvas.getContext('2d');
+	board.imageSmoothingEnabled = false;
+}
 
 function newMap() {
 	gameMap = []
 	
 	// A loop that runs while i is less than 500.
 	for (let i = 0; i < mapSize; i++)
-		gameMap[i] = Array(500).fill({type: tileTypes.grass, building: null})
+		gameMap[i] = Array(500).fill(new Tile(tileTypes.GRASS))
 	// Braces aren't required for loops/ifs with only one action. They can also be one line.
 
-	setLoc({type: tileTypes.water, building: null},250,250);
+	setLoc(new Tile(tileTypes.WATER),250,250);
 
-	resetGrid();
+	redraw();
+}
+
+function changeZoom(amnt) {
+	const defaultFovX = 11, defaultFovY = 7;
+	scrollAmnt+=amnt;
+	if (scrollAmnt < 0.5) scrollAmnt = 0.5;
+	if (scrollAmnt > 2) scrollAmnt = 2;
+	xFOV = Math.round(scrollAmnt*defaultFovX);
+	yFOV = Math.round(scrollAmnt*defaultFovY);
+
+	validatePosition();
+	redraw();
+}
+
+function validatePosition() {
+	if (xFOV>mapSize/2) xFOV = mapSize/2;
+	if (yFOV>mapSize/2) yFOV = mapSize/2;
+	if (currentX+xFOV>=mapSize) currentX=mapSize-xFOV;
+	if (currentY+yFOV>=mapSize) currentY=mapSize-yFOV;
+	if (currentX-xFOV<0) currentX=mapSize+xFOV;
+	if (currentY-yFOV<0) currentY=mapSize+yFOV;
 }
 
 function inBounds(x,y) {
@@ -52,42 +75,18 @@ Equals to but bad ==
 Equals to but good ===
 */
 
-
-// Initialize all of the div squares for the gameMap 
-function resetGrid() {
-	const htmlGameMap = document.getElementById("gameMap");
-	const htmlPosX = htmlGameMap.getBoundingClientRect().left + 3;	// 3px border
-	const htmlPosY = htmlGameMap.getBoundingClientRect().top + 3;	// 3px border
-	const tileWidth = htmlGameMap.scrollWidth / (xFOV*2+1);
-	const tileHeight = htmlGameMap.scrollHeight / (yFOV*2+1);
-	for (let x = 0; x <= xFOV * 2; x++) {
-		for (let y = 0; y <= yFOV * 2; y++) {
-			let remove = document.getElementById(x + " " + y);
-			if (remove!=null) remove.remove();
-			let element = document.createElement("div");
-			element.id = x + " " + y;
-			element.setAttribute("style", `position:fixed; width:${tileWidth}px; height:${tileHeight}px; left:${htmlPosX + x*tileWidth}px; top:${htmlPosY + y*tileHeight}px;`);
-			let img = document.createElement("img");
-			img.src = tileTypes[null].display;
-			img.setAttribute("style", `width:${tileWidth}px; height:${tileHeight}px;`);
-			img.classList.add("tile");
-			element.appendChild(img);
-			htmlGameMap.appendChild(element);
-		}
-	}
-
-	redraw();
-}
-
 // Draws images to all of the divSquares as needed.
 function redraw() {
 	const xMin = currentX-xFOV;
 	const yMin = currentY-yFOV;
+	const tileSizeX = gameCanvas.width / (xFOV * 2 + 1);
+	const tileSizeY = gameCanvas.height / (yFOV * 2 + 1);
+	board.clearRect(0,0,gameCanvas.width,gameCanvas.height);
 	for (let x = 0; x <= xFOV * 2; x++) {
 		for (let y = 0; y <= yFOV * 2; y++) {
-			let element = document.getElementById(`${x} ${y}`).children[0];
-			let tile = getLoc(xMin+x, yMin+y).type.display;
-			element.src = tile;
+			let tile = getLoc(xMin+x, yMin+y);
+			board.drawImage(tile.type.display, Math.floor(x*tileSizeX), Math.floor(y*tileSizeY), Math.ceil(tileSizeX), Math.ceil(tileSizeY));
+			board.drawImage(tile.building.type.display, Math.floor(x*tileSizeX), Math.floor(y*tileSizeY), Math.ceil(tileSizeX), Math.ceil(tileSizeY));
 		}
 	}
 }
