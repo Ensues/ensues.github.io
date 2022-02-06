@@ -121,8 +121,6 @@ function redraw() {
 
 	const rawPosX = Math.floor(currentX);
 	const rawPosY = Math.floor(currentY);
-	const offsetX = currentX - rawPosX;
-	const offsetY = currentY - rawPosY;
 	const xMin = rawPosX-Math.floor(xFOV)-2;
 	const yMin = rawPosY-Math.floor(yFOV)-2;
 	const xMax = rawPosX+Math.ceil(xFOV)+2;
