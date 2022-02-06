@@ -8,6 +8,7 @@ var currentX = 250, currentY = 250;
 tileTypes[null] = {display: "assets/none.png"};
 tileTypes[undefined] = tileTypes[null];
 tileTypes["grass"] = {display: "assets/tiles/grass.png"};
+tileTypes["water"] = {display: "assets/tiles/water.png"};
 
 
 function newMap() {
@@ -15,8 +16,10 @@ function newMap() {
 	
 	// A loop that runs while i is less than 500.
 	for (let i = 0; i < mapSize; i++)
-		gameMap[i] = Array(500).fill("grass")
+		gameMap[i] = Array(500).fill({type: tileTypes.grass, building: null})
 	// Braces aren't required for loops/ifs with only one action. They can also be one line.
+
+	setLoc({type: tileTypes.water, building: null},250,250);
 
 	resetGrid();
 }
@@ -34,7 +37,7 @@ function getLoc(x,y) {
 	if (!inBounds(x,y)) // Runs code if it's false
 		return undefined
 		
-	return tileTypes[gameMap[x][y]];
+	return gameMap[x][y];
 }
 function setLoc(a,x,y) {
 	if (!inBounds(x,y)) // Runs code if it's false
@@ -83,7 +86,7 @@ function redraw() {
 	for (let x = 0; x <= xFOV * 2; x++) {
 		for (let y = 0; y <= yFOV * 2; y++) {
 			let element = document.getElementById(`${x} ${y}`).children[0];
-			let tile = getLoc(xMin+x, yMin+y).display;
+			let tile = getLoc(xMin+x, yMin+y).type.display;
 			element.src = tile;
 		}
 	}
