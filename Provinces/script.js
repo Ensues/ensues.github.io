@@ -7,5 +7,7 @@ function onLoad() {
 }
 
 function onResize() {
+	fitCanvas();
 	redraw();
 }
+

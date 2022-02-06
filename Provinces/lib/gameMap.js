@@ -14,8 +14,7 @@ let dragLastY;
 function gameMapPreload() {
 	gameCanvas = document.getElementById("gameCanvas");
 	board = gameCanvas.getContext('2d');
-	board.imageSmoothingEnabled = false;
-
+	fitCanvas();
 	
 	gameCanvas.addEventListener('wheel', e => {
 		const zoomValue = Math.sign(e.deltaY) * 0.1;
@@ -106,6 +105,12 @@ Equals to but bad ==
 Equals to but good ===
 */
 
+function fitCanvas() {
+	const container = document.getElementById("gameMap");
+	gameCanvas.width = container.scrollWidth;
+	gameCanvas.height = container.scrollHeight;
+}
+
 // Draws images to all of the divSquares as needed.
 function redraw() {
 	const tileSizeX = gameCanvas.width / (xFOV * 2 + 1);
@@ -130,6 +135,7 @@ function redraw() {
 			if (tile!=null) {
 				let posX = Math.floor((x-rawPosX-offsetX)*tileSizeX+centerX);
 				let posY = Math.floor((y-rawPosY-offsetY)*tileSizeY+centerY);
+				board.imageSmoothingEnabled = false;
 				board.drawImage(tile.type.display, posX, posY, Math.ceil(tileSizeX), Math.ceil(tileSizeY));
 				board.drawImage(tile.building.type.display, posX, posY, Math.ceil(tileSizeX), Math.ceil(tileSizeY));
 			}
