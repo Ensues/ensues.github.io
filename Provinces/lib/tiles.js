@@ -2,28 +2,32 @@ var tileTypes = {};
 var buildingTypes = {};
 
 async function preloadTiles() {
-    tileTypes.GRASS = new TileType("assets/tiles/grass.png");
-    tileTypes.WATER = new TileType("assets/tiles/water.png");
+    tileTypes.GRASS = new TileType("grass");
+    tileTypes.WATER = new TileType("water");
 
-    buildingTypes.NOTHING = new BuildingType("assets/buildings/nothing.png");
-    buildingTypes.CAMPSITE = new BuildingType("assets/buildings/capital1.png");
+    buildingTypes.NOTHING = new BuildingType("nothing");
+    buildingTypes.CAMPSITE = new BuildingType("capital1");
 }
 
 class TileType {
     display;
+    name;
 
     constructor(img) {
         this.display = new Image();
-        this.display.src = img;
+        this.display.src = "assets/tiles/"+img+".png";
+        this.name = img.charAt(0).toUpperCase()+img.slice(1)
     }
 }
 
 class BuildingType {
     display;
+    name;
 
     constructor(img) {
         this.display = new Image();
-        this.display.src = img;
+        this.display.src = "assets/buildings/"+img+".png";
+        this.name = img.charAt(0).toUpperCase()+img.slice(1)
     }
 }
 
