@@ -47,4 +47,10 @@ class Tile {
         this.type = t;
         this.building = b;
     }
+
+    render(x, y, sizeX, sizeY) {
+        board.imageSmoothingEnabled = false;
+        board.drawImage(this.type.display, Math.floor(x), Math.floor(y), Math.ceil(sizeX), Math.ceil(sizeY));
+        board.drawImage(this.building.type.display, Math.floor(x), Math.floor(y), Math.ceil(sizeX), Math.ceil(sizeY));
+    }
 }
