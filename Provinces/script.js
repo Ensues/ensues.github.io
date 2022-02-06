@@ -9,8 +9,3 @@ function onLoad() {
 function onResize() {
 	redraw();
 }
-
-document.addEventListener('wheel', e => {
-	const zoomValue = Math.sign(e.deltaY) * 0.1;
-	changeZoom(zoomValue);
-});

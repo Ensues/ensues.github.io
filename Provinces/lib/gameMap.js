@@ -7,11 +7,42 @@ var currentX = 250, currentY = 250;
 var gameCanvas;
 var board;
 
+let dragging = false;
+let dragLastX;
+let dragLastY;
+
 function gameMapPreload() {
 	gameCanvas = document.getElementById("gameCanvas");
 	board = gameCanvas.getContext('2d');
 	board.imageSmoothingEnabled = false;
+
+	
+	gameCanvas.addEventListener('wheel', e => {
+		const zoomValue = Math.sign(e.deltaY) * 0.1;
+		changeZoom(zoomValue);
+	});
+
+	gameCanvas.addEventListener('mousedown', e => {
+		dragging = true;
+		dragLastX = e.offsetX;
+		dragLastY = e.offsetY;
+	});
+	gameCanvas.addEventListener('mousemove', e => {
+		if (dragging) {
+			currentX += (dragLastX-e.offsetX)*scrollAmnt/50;
+			currentY += (dragLastY-e.offsetY)*scrollAmnt/50;
+			dragLastX = e.offsetX;
+			dragLastY = e.offsetY;
+			validatePosition();
+			redraw();
+		}
+	});
 }
+
+document.addEventListener('mouseup', e => {
+	dragging = false;
+});
+
 
 function newMap() {
 	gameMap = []
@@ -31,8 +62,8 @@ function changeZoom(amnt) {
 	scrollAmnt+=amnt;
 	if (scrollAmnt < 0.5) scrollAmnt = 0.5;
 	if (scrollAmnt > 2) scrollAmnt = 2;
-	xFOV = Math.round(scrollAmnt*defaultFovX);
-	yFOV = Math.round(scrollAmnt*defaultFovY);
+	xFOV = scrollAmnt*defaultFovX;
+	yFOV = scrollAmnt*defaultFovY;
 
 	validatePosition();
 	redraw();
@@ -41,10 +72,10 @@ function changeZoom(amnt) {
 function validatePosition() {
 	if (xFOV>mapSize/2) xFOV = mapSize/2;
 	if (yFOV>mapSize/2) yFOV = mapSize/2;
-	if (currentX+xFOV>=mapSize) currentX=mapSize-xFOV;
-	if (currentY+yFOV>=mapSize) currentY=mapSize-yFOV;
-	if (currentX-xFOV<0) currentX=mapSize+xFOV;
-	if (currentY-yFOV<0) currentY=mapSize+yFOV;
+	if (currentX+xFOV+1>=mapSize) currentX=mapSize-xFOV-1;
+	if (currentY+yFOV+1>=mapSize) currentY=mapSize-yFOV-1;
+	if (currentX-xFOV-1<0) currentX=xFOV+1;
+	if (currentY-yFOV-1<0) currentY=yFOV+1;
 }
 
 function inBounds(x,y) {
@@ -77,16 +108,31 @@ Equals to but good ===
 
 // Draws images to all of the divSquares as needed.
 function redraw() {
-	const xMin = currentX-xFOV;
-	const yMin = currentY-yFOV;
 	const tileSizeX = gameCanvas.width / (xFOV * 2 + 1);
 	const tileSizeY = gameCanvas.height / (yFOV * 2 + 1);
+
+	const centerX = gameCanvas.width/2;
+	const centerY = gameCanvas.height/2;
+
+	const rawPosX = Math.floor(currentX);
+	const rawPosY = Math.floor(currentY);
+	const offsetX = currentX - rawPosX;
+	const offsetY = currentY - rawPosY;
+	const xMin = rawPosX-Math.floor(xFOV)-2;
+	const yMin = rawPosY-Math.floor(yFOV)-2;
+	const xMax = rawPosX+Math.ceil(xFOV)+2;
+	const yMax = rawPosY+Math.ceil(yFOV)+2;
+
 	board.clearRect(0,0,gameCanvas.width,gameCanvas.height);
-	for (let x = 0; x <= xFOV * 2; x++) {
-		for (let y = 0; y <= yFOV * 2; y++) {
-			let tile = getLoc(xMin+x, yMin+y);
-			board.drawImage(tile.type.display, Math.floor(x*tileSizeX), Math.floor(y*tileSizeY), Math.ceil(tileSizeX), Math.ceil(tileSizeY));
-			board.drawImage(tile.building.type.display, Math.floor(x*tileSizeX), Math.floor(y*tileSizeY), Math.ceil(tileSizeX), Math.ceil(tileSizeY));
+	for (let x = xMin; x < xMax; x++) {
+		for (let y = yMin; y < yMax; y++) {
+			let tile = getLoc(x, y);
+			if (tile!=null) {
+				let posX = Math.floor((x-rawPosX-offsetX)*tileSizeX+centerX);
+				let posY = Math.floor((y-rawPosY-offsetY)*tileSizeY+centerY);
+				board.drawImage(tile.type.display, posX, posY, Math.ceil(tileSizeX), Math.ceil(tileSizeY));
+				board.drawImage(tile.building.type.display, posX, posY, Math.ceil(tileSizeX), Math.ceil(tileSizeY));
+			}
 		}
 	}
 }
