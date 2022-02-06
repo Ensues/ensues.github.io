@@ -112,9 +112,11 @@ function fitCanvas() {
 }
 
 // Draws images to all of the divSquares as needed.
+let tileSizeX;
+let tileSizeY;
 function redraw() {
-	const tileSizeX = gameCanvas.width / (xFOV * 2 + 1);
-	const tileSizeY = gameCanvas.height / (yFOV * 2 + 1);
+	tileSizeX = gameCanvas.width / (xFOV * 2 + 1);
+	tileSizeY = gameCanvas.height / (yFOV * 2 + 1);
 
 	const centerX = gameCanvas.width/2;
 	const centerY = gameCanvas.height/2;
@@ -137,4 +139,19 @@ function redraw() {
 			}
 		}
 	}
+}
+
+// Returns the tile you're hovering over
+function hoveredTile() {
+	const box = gameCanvas.getBoundingClientRect();
+
+	const relX = mouseX - box.left;
+	const relY = mouseY - box.top;
+
+	if (relX<0 || relY<0 || relX>gameCanvas.scrollWidth || relY>gameCanvas.scrollHeight) return null;
+
+	const centerX = gameCanvas.width/2;
+	const centerY = gameCanvas.height/2;
+
+	return {x: Math.floor(((relX-centerX)/tileSizeX)+currentX), y: Math.floor(((relY-centerY)/tileSizeY)+currentY)}
 }

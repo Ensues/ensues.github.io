@@ -11,3 +11,9 @@ function onResize() {
 	redraw();
 }
 
+var mouseX = -1;
+var mouseY = -1;
+document.addEventListener('mousemove', e => {
+	mouseX = e.pageX;
+	mouseY = e.pageY;
+});
