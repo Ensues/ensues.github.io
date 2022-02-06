@@ -133,8 +133,8 @@ function redraw() {
 		for (let y = yMin; y < yMax; y++) {
 			let tile = getLoc(x, y);
 			if (tile!=null) {
-				let posX = Math.floor((x-rawPosX-offsetX)*tileSizeX+centerX);
-				let posY = Math.floor((y-rawPosY-offsetY)*tileSizeY+centerY);
+				let posX = Math.floor((x-currentX)*tileSizeX+centerX);
+				let posY = Math.floor((y-currentY)*tileSizeY+centerY);
 				board.imageSmoothingEnabled = false;
 				board.drawImage(tile.type.display, posX, posY, Math.ceil(tileSizeX), Math.ceil(tileSizeY));
 				board.drawImage(tile.building.type.display, posX, posY, Math.ceil(tileSizeX), Math.ceil(tileSizeY));
