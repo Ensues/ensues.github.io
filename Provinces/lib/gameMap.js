@@ -20,6 +20,8 @@ function gameMapPreload() {
 		const zoomValue = Math.sign(e.deltaY) * 0.1;
 		changeZoom(zoomValue);
 	});
+	
+	gameCanvas.addEventListener('click', clickMap)
 
 	gameCanvas.addEventListener('mousedown', e => {
 		dragging = true;
@@ -129,6 +131,8 @@ function redraw() {
 	const yMax = rawPosY+Math.ceil(yFOV)+2;
 
 	board.clearRect(0,0,gameCanvas.width,gameCanvas.height);
+	
+	let selTileInfo = null;
 	for (let x = xMin; x < xMax; x++) {
 		for (let y = yMin; y < yMax; y++) {
 			let tile = getLoc(x, y);
@@ -136,9 +140,18 @@ function redraw() {
 				let posX = (x-currentX)*tileSizeX+centerX;
 				let posY = (y-currentY)*tileSizeY+centerY;
 				tile.render(posX,posY,tileSizeX,tileSizeY);
+				if (selectedTile != null && (x == selectedTile.x && y == selectedTile.y)) {
+					selTileInfo = {x:posX,y:posY};
+				}
 			}
 		}
 	}
+	if (selTileInfo != null) {
+		board.lineWidth = 5;
+		board.strokeStyle = "#FFFF00";
+		board.strokeRect(selTileInfo.x,selTileInfo.y,tileSizeX,tileSizeY);
+	}
+	
 }
 
 // Returns the tile you're hovering over
@@ -154,4 +167,16 @@ function hoveredTile() {
 	const centerY = gameCanvas.height/2;
 
 	return {x: Math.floor(((relX-centerX)/tileSizeX)+currentX), y: Math.floor(((relY-centerY)/tileSizeY)+currentY)}
+}
+
+let selectedTile = null;
+function clickMap() {
+	
+	const clickedTile = hoveredTile();
+	if (selectedTile != null && (clickedTile.x == selectedTile.x && clickedTile.y == selectedTile.y))
+		selectedTile = null;
+	else
+		selectedTile = clickedTile;
+	
+	
 }
