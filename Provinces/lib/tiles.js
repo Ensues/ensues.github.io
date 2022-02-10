@@ -42,15 +42,19 @@ class Building {
 class Tile {
     type;
     building;
+    owner;
 
-    constructor(t, b=new Building(buildingTypes.NOTHING)) {
+    constructor(t, b=new Building(buildingTypes.NOTHING), owner=teams.NONE) {
         this.type = t;
         this.building = b;
+        this.owner = owner;
     }
 
     render(x, y, sizeX, sizeY) {
         board.imageSmoothingEnabled = false;
         board.drawImage(this.type.display, Math.floor(x), Math.floor(y), Math.ceil(sizeX), Math.ceil(sizeY));
         board.drawImage(this.building.type.display, Math.floor(x), Math.floor(y), Math.ceil(sizeX), Math.ceil(sizeY));
+        board.fillStyle = this.owner.color;
+        board.fillRect(Math.floor(x), Math.floor(y), Math.ceil(sizeX), Math.ceil(sizeY));
     }
 }

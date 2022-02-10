@@ -54,11 +54,26 @@ function newMap() {
 	gameMap = []
 	
 	// A loop that runs while i is less than 500.
-	for (let i = 0; i < mapSize; i++)
-		gameMap[i] = Array(500).fill(new Tile(tileTypes.GRASS))
+	for (let x = 0; x < mapSize; x++) {
+		gameMap[x] = [];
+		for (let y = 0; y < mapSize; y++)
+			gameMap[x][y] = new Tile(tileTypes.GRASS);
+	}
 	// Braces aren't required for loops/ifs with only one action. They can also be one line.
 
-	setLoc(new Tile(tileTypes.GRASS,new Building(buildingTypes.CAMPSITE)),250,250);
+	let startX = randInt(230,270);
+	let startY = randInt(230,270);
+	currentX = startX + 0.5;
+	currentY = startY + 0.5;
+	const initialClaimSize = 2;
+	
+	setLoc(new Tile(tileTypes.GRASS,new Building(buildingTypes.CAMPSITE)),startX,startY);
+	for (let x = startX-initialClaimSize; x<=startX+initialClaimSize; x++) {
+		for (let y = startY-initialClaimSize; y<=startY+initialClaimSize; y++) {
+			console.log(x+ " " + y);
+			getLoc(x,y).owner = teams.BLUE;
+		}
+	}
 
 	redraw();
 }
@@ -146,14 +161,14 @@ function redraw() {
 				let posY = (y-currentY)*tileSizeY+centerY;
 				tile.render(posX,posY,tileSizeX,tileSizeY);
 				if (selectedTile != null && (x == selectedTile.x && y == selectedTile.y)) {
-					selTileInfo = {x:posX,y:posY};
+					selTileInfo = {x:posX,y:posY,tileX:x,tileY:y};
 				}
 			}
 		}
 	}
 	if (selTileInfo != null) {
 		board.lineWidth = 5;
-		board.strokeStyle = "#FFFF00";
+		board.strokeStyle = getLoc(selTileInfo.tileX,selTileInfo.tileY).owner.highlightColor;
 		board.strokeRect(selTileInfo.x,selTileInfo.y,tileSizeX,tileSizeY);
 	}
 	
@@ -182,5 +197,7 @@ function clickMap() {
 			selectedTile = null;
 		else
 			selectedTile = clickedTile;
+		console.log(getLoc(selectedTile.x,selectedTile.y))
+		redraw();
 	}
 }

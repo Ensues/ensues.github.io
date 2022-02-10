@@ -1,6 +1,7 @@
 function onLoad() {
 	gameMapPreload();
 	preloadTiles();
+	preloadTeams();
 	newMap();
 
 	setInterval(redraw, 100);
@@ -17,3 +18,7 @@ document.addEventListener('mousemove', e => {
 	mouseX = e.pageX;
 	mouseY = e.pageY;
 });
+
+function randInt(min,max) {
+	return Math.floor(Math.random()*(max-min))+min;
+}
