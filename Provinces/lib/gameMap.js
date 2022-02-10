@@ -24,9 +24,11 @@ function gameMapPreload() {
 	gameCanvas.addEventListener('click', clickMap)
 
 	gameCanvas.addEventListener('mousedown', e => {
-		dragging = true;
-		dragLastX = e.offsetX;
-		dragLastY = e.offsetY;
+		if (e.button!=0) {
+			dragging = true;
+			dragLastX = e.offsetX;
+			dragLastY = e.offsetY;
+		}
 	});
 	gameCanvas.addEventListener('mousemove', e => {
 		if (dragging) {
@@ -38,10 +40,13 @@ function gameMapPreload() {
 			redraw();
 		}
 	});
+	gameCanvas.addEventListener('contextmenu', e => e.preventDefault());
 }
 
 document.addEventListener('mouseup', e => {
-	dragging = false;
+	if (e.button!=0) {
+		dragging = false;
+	}
 });
 
 
@@ -171,12 +176,11 @@ function hoveredTile() {
 
 let selectedTile = null;
 function clickMap() {
-	
-	const clickedTile = hoveredTile();
-	if (selectedTile != null && (clickedTile.x == selectedTile.x && clickedTile.y == selectedTile.y))
-		selectedTile = null;
-	else
-		selectedTile = clickedTile;
-	
-	
+	if (!dragging) {
+		const clickedTile = hoveredTile();
+		if (selectedTile != null && (clickedTile.x == selectedTile.x && clickedTile.y == selectedTile.y))
+			selectedTile = null;
+		else
+			selectedTile = clickedTile;
+	}
 }
