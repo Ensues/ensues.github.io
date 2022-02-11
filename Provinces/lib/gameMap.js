@@ -65,24 +65,31 @@ function newMap() {
 	let startY = randInt(230,270);
 	currentX = startX + 0.5;
 	currentY = startY + 0.5;
-	const initialClaimSize = 2;
-	
-	setLoc(new Tile(tileTypes.GRASS,new Building(buildingTypes.CAMPSITE)),startX,startY);
-	for (let x = startX-initialClaimSize; x<=startX+initialClaimSize; x++) {
-		for (let y = startY-initialClaimSize; y<=startY+initialClaimSize; y++) {
-			console.log(x+ " " + y);
-			getLoc(x,y).owner = teams.BLUE;
-		}
-	}
+	createSpawn(startX,startY,teams.PLAYER);
+	createSpawn(randInt(30,mapSize-30),randInt(mapSize-30,mapSize-10),teams.PIRATES,3);
+	createSpawn(randInt(mapSize-30,mapSize-10),randInt(30,mapSize-30),teams.NOMADS);
+	createSpawn(randInt(10,30),randInt(30,mapSize-30),teams.ESKIMOS,5);
+	createSpawn(randInt(30,mapSize-30),randInt(10,30),teams.PYGMIES,8);
 
 	redraw();
 }
 
+function createSpawn(startX,startY,team,initialClaimSize=2) {
+
+	getLoc(startX,startY).setBuilding(new Building(buildingTypes.CAMPSITE, team));
+	for (let x = startX-initialClaimSize; x<=startX+initialClaimSize; x++) {
+		for (let y = startY-initialClaimSize; y<=startY+initialClaimSize; y++) {
+			getLoc(x,y).setTeam(team);
+		}
+	}
+}
+
 function changeZoom(amnt) {
 	const defaultFovX = 11, defaultFovY = 7;
+	const minZoom = 5, maxZoom = 0.5;
 	scrollAmnt+=amnt;
-	if (scrollAmnt < 0.5) scrollAmnt = 0.5;
-	if (scrollAmnt > 2) scrollAmnt = 2;
+	if (scrollAmnt < maxZoom) scrollAmnt = maxZoom;
+	if (scrollAmnt > minZoom) scrollAmnt = minZoom;
 	xFOV = scrollAmnt*defaultFovX;
 	yFOV = scrollAmnt*defaultFovY;
 
@@ -167,7 +174,7 @@ function redraw() {
 		}
 	}
 	if (selTileInfo != null) {
-		board.lineWidth = 5;
+		board.lineWidth = (tileSizeX+tileSizeY)/30;
 		board.strokeStyle = getLoc(selTileInfo.tileX,selTileInfo.tileY).owner.highlightColor;
 		board.strokeRect(selTileInfo.x,selTileInfo.y,tileSizeX,tileSizeY);
 	}
@@ -197,7 +204,6 @@ function clickMap() {
 			selectedTile = null;
 		else
 			selectedTile = clickedTile;
-		console.log(getLoc(selectedTile.x,selectedTile.y))
 		redraw();
 	}
 }
