@@ -17,8 +17,12 @@ function gameMapPreload() {
 	fitCanvas();
 	
 	gameCanvas.addEventListener('wheel', e => {
-		const zoomValue = Math.sign(e.deltaY) * 0.1;
-		changeZoom(zoomValue);
+		const zoomSpeed = 0.1;
+		const zoomValue = Math.sign(e.deltaY) * zoomSpeed;
+
+		const tile = hoveredTile();
+
+		changeZoom(zoomValue,tile);
 	});
 	
 	gameCanvas.addEventListener('click', clickMap)
@@ -84,14 +88,24 @@ function createSpawn(startX,startY,team,initialClaimSize=2) {
 	}
 }
 
-function changeZoom(amnt) {
+function changeZoom(amnt,towards) {
+	const initVal = scrollAmnt;
 	const defaultFovX = 11, defaultFovY = 7;
-	const minZoom = 5, maxZoom = 0.5;
+	const minZoom = 2, maxZoom = 0.5;
 	scrollAmnt+=amnt;
 	if (scrollAmnt < maxZoom) scrollAmnt = maxZoom;
 	if (scrollAmnt > minZoom) scrollAmnt = minZoom;
+
+	/* Code to zoom on cursor position, TBF
+	if (towards!=null) {
+		let change = scrollAmnt-initVal;
+		currentX+=(towards.x-currentX)*change*-1;
+		currentY+=(towards.y-currentY)*change*-1;
+	}*/
+
 	xFOV = scrollAmnt*defaultFovX;
 	yFOV = scrollAmnt*defaultFovY;
+
 
 	validatePosition();
 	redraw();
