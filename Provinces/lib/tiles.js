@@ -90,3 +90,24 @@ class Tile {
         board.drawImage(this.building.getDisplay(), Math.floor(x), Math.floor(y), Math.ceil(sizeX), Math.ceil(sizeY));
     }
 }
+
+
+// Returns the tile you're hovering over
+function hoveredTile() {
+	let out = screenLocToGamePos(mouseX,mouseY);
+	return {x: Math.floor(out.x), y: Math.floor(out.y)}
+}
+
+function screenLocToGamePos(sX,sY) {
+	const box = gameCanvas.getBoundingClientRect();
+
+	const relX = sX - box.left;
+	const relY = sY - box.top;
+
+	if (relX<0 || relY<0 || relX>gameCanvas.scrollWidth || relY>gameCanvas.scrollHeight) return null;
+
+	const centerX = gameCanvas.width/2;
+	const centerY = gameCanvas.height/2;
+
+	return {x: ((relX-centerX)/tileSizeX)+currentX, y: ((relY-centerY)/tileSizeY)+currentY}
+}

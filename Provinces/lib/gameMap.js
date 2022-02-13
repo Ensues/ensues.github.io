@@ -8,8 +8,15 @@ var gameCanvas;
 var board;
 
 let dragging = false;
-let dragLastX;
-let dragLastY;
+let startDragX;
+let startDragY;
+let dragInitX;
+let dragInitY;
+let held = false;
+let lastClickType;
+let drawBox = false;
+let boxSizeX;
+let boxSizeY;
 
 function gameMapPreload() {
 	gameCanvas = document.getElementById("gameCanvas");
@@ -24,35 +31,79 @@ function gameMapPreload() {
 
 		changeZoom(zoomValue,tile);
 	});
-	
-	gameCanvas.addEventListener('click', clickMap)
 
 	gameCanvas.addEventListener('mousedown', e => {
-		if (e.button!=0) {
-			dragging = true;
-			dragLastX = e.offsetX;
-			dragLastY = e.offsetY;
-		}
+		if (held==true) return;
+		held = true;
+		startDragX = e.offsetX;
+		startDragY = e.offsetY;
+		dragInitX = currentX;
+		dragInitY = currentY;
+		lastClickType = e.button;
 	});
 	gameCanvas.addEventListener('mousemove', e => {
-		if (dragging) {
-			currentX += (dragLastX-e.offsetX)*scrollAmnt/50;
-			currentY += (dragLastY-e.offsetY)*scrollAmnt/50;
-			dragLastX = e.offsetX;
-			dragLastY = e.offsetY;
-			validatePosition();
-			redraw();
+		if (held) {
+			if (!dragging && (Math.abs(startDragX-e.offsetX)>8 || Math.abs(startDragY-e.offsetY)>8)) {
+				dragging = true;
+			}
+			if (dragging) {
+				switch (lastClickType) {
+					case 0: lcDrag(e); break;
+					case 2: rcDrag(e); break;
+					default: elseDrag(e); break;
+				}
+			}
 		}
+	});
+	document.addEventListener('mouseup', e => {
+		if (!dragging) {
+			switch (lastClickType) {
+				case 0: lcClick(e); break;
+				case 2: rcClick(e); break;
+				default: elseClick(e); break;
+			}
+		} else {
+			switch (lastClickType) {
+				case 0: lcEndDrag(e); break;
+				case 2: rcEndDrag(e); break;
+				default: elseEndDrag(e); break;
+			}
+		}
+		dragging = false;
+		held = false;
+		drawBox = false;
 	});
 	gameCanvas.addEventListener('contextmenu', e => e.preventDefault());
 }
 
-document.addEventListener('mouseup', e => {
-	if (e.button!=0) {
-		dragging = false;
-	}
-});
+function lcDrag(e) {
+	currentX = dragInitX + (startDragX-e.offsetX)*scrollAmnt/50;
+	currentY = dragInitY + (startDragY-e.offsetY)*scrollAmnt/50;
+	validatePosition();
+	redraw();
+}
+function lcEndDrag(e) {}
+function lcClick(e) {
+	clickMap();
+}
+function rcDrag(e) {
+	if (!drawBox) drawBox = true;
+	boxSizeX = e.offsetX - startDragX;
+	boxSizeY = e.offsetY - startDragY;
+	redraw();
+}
+function rcEndDrag(e) {
+	selectUnits({x:dragInitX,y:dragInitY},screenLocToGamePos(e.offsetX,e.offetY));
+	drawBox = false;
+}
+function rcClick(e) {
+	selectUnit(screenLocToGamePos(e.offsetX,e.offetY));
+}
+let elseDrag = e => lcDrag(e); 
+function elseEndDrag(e) {}
+function elseClick(e) {
 
+}
 
 function newMap() {
 	gameMap = []
@@ -192,23 +243,13 @@ function redraw() {
 		board.strokeStyle = getLoc(selTileInfo.tileX,selTileInfo.tileY).owner.highlightColor;
 		board.strokeRect(selTileInfo.x,selTileInfo.y,tileSizeX,tileSizeY);
 	}
-	
+	if (drawBox) {
+		board.lineWidth = 5;
+		board.strokeStyle = "#FFFFFF";
+		board.strokeRect(startDragX,startDragY,boxSizeX,boxSizeY);
+	}
 }
 
-// Returns the tile you're hovering over
-function hoveredTile() {
-	const box = gameCanvas.getBoundingClientRect();
-
-	const relX = mouseX - box.left;
-	const relY = mouseY - box.top;
-
-	if (relX<0 || relY<0 || relX>gameCanvas.scrollWidth || relY>gameCanvas.scrollHeight) return null;
-
-	const centerX = gameCanvas.width/2;
-	const centerY = gameCanvas.height/2;
-
-	return {x: Math.floor(((relX-centerX)/tileSizeX)+currentX), y: Math.floor(((relY-centerY)/tileSizeY)+currentY)}
-}
 
 let selectedTile = null;
 function clickMap() {
@@ -220,4 +261,11 @@ function clickMap() {
 			selectedTile = clickedTile;
 		redraw();
 	}
+}
+
+function selectUnits(pos1,pos2) {
+
+}
+function selectUnit(pos) {
+
 }
