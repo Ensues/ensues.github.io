@@ -7,102 +7,11 @@ var currentX = 250, currentY = 250;
 var gameCanvas;
 var board;
 
-let dragging = false;
-let startDragX;
-let startDragY;
-let dragInitX;
-let dragInitY;
-let held = false;
-let lastClickType;
-let drawBox = false;
-let boxSizeX;
-let boxSizeY;
 
 function gameMapPreload() {
 	gameCanvas = document.getElementById("gameCanvas");
 	board = gameCanvas.getContext('2d');
 	fitCanvas();
-	
-	gameCanvas.addEventListener('wheel', e => {
-		const zoomSpeed = 0.1;
-		const zoomValue = Math.sign(e.deltaY) * zoomSpeed;
-
-		const tile = hoveredTile();
-
-		changeZoom(zoomValue,tile);
-	});
-
-	gameCanvas.addEventListener('mousedown', e => {
-		if (held==true) return;
-		held = true;
-		startDragX = e.offsetX;
-		startDragY = e.offsetY;
-		dragInitX = currentX;
-		dragInitY = currentY;
-		lastClickType = e.button;
-	});
-	gameCanvas.addEventListener('mousemove', e => {
-		if (held) {
-			if (!dragging && (Math.abs(startDragX-e.offsetX)>8 || Math.abs(startDragY-e.offsetY)>8)) {
-				dragging = true;
-			}
-			if (dragging) {
-				switch (lastClickType) {
-					case 0: lcDrag(e); break;
-					case 2: rcDrag(e); break;
-					default: elseDrag(e); break;
-				}
-			}
-		}
-	});
-	document.addEventListener('mouseup', e => {
-		if (!dragging) {
-			switch (lastClickType) {
-				case 0: lcClick(e); break;
-				case 2: rcClick(e); break;
-				default: elseClick(e); break;
-			}
-		} else {
-			switch (lastClickType) {
-				case 0: lcEndDrag(e); break;
-				case 2: rcEndDrag(e); break;
-				default: elseEndDrag(e); break;
-			}
-		}
-		dragging = false;
-		held = false;
-		drawBox = false;
-	});
-	gameCanvas.addEventListener('contextmenu', e => e.preventDefault());
-}
-
-function lcDrag(e) {
-	currentX = dragInitX + (startDragX-e.offsetX)*scrollAmnt/50;
-	currentY = dragInitY + (startDragY-e.offsetY)*scrollAmnt/50;
-	validatePosition();
-	redraw();
-}
-function lcEndDrag(e) {}
-function lcClick(e) {
-	clickMap();
-}
-function rcDrag(e) {
-	if (!drawBox) drawBox = true;
-	boxSizeX = e.offsetX - startDragX;
-	boxSizeY = e.offsetY - startDragY;
-	redraw();
-}
-function rcEndDrag(e) {
-	selectUnits({x:dragInitX,y:dragInitY},screenLocToGamePos(e.offsetX,e.offetY));
-	drawBox = false;
-}
-function rcClick(e) {
-	selectUnit(screenLocToGamePos(e.offsetX,e.offetY));
-}
-let elseDrag = e => lcDrag(e); 
-function elseEndDrag(e) {}
-function elseClick(e) {
-
 }
 
 function newMap() {
@@ -264,8 +173,5 @@ function clickMap() {
 }
 
 function selectUnits(pos1,pos2) {
-
-}
-function selectUnit(pos) {
 
 }
