@@ -1,16 +1,21 @@
-function onLoad() {
-	gameMapPreload();
-	preloadTiles();
-	preloadTeams();
-	newMap();
-	loadListeners();
+import { GameMap, View } from "./lib/gameMap.mjs";
 
-	setInterval(redraw, 100);
-}
+let gameMap;
+let myView;
 
-function onResize() {
-	fitCanvas();
-	redraw();
+window.addEventListener("load", () => {
+	gameMap = new GameMap();
+	myView = new View(gameMap, document.getElementById("gameCanvas"));
+
+	setInterval(renderLoop, 1000);
+});
+
+document.addEventListener("resize", e => {
+
+});
+
+function renderLoop() {
+	myView.render();
 }
 
 function fitCanvas() {

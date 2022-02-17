@@ -1,13 +1,4 @@
-var tileTypes = {};
-var buildingTypes = {};
-
-async function preloadTiles() {
-    tileTypes.GRASS = new TileType("grass");
-    tileTypes.WATER = new TileType("water");
-
-    buildingTypes.NOTHING = new BuildingType("nothing", false);
-    buildingTypes.CAMPSITE = new BuildingType("capitols/capitol1", true);
-}
+import { teams, teamNames } from "./teams.mjs";
 
 class TileType {
     display;
@@ -82,7 +73,7 @@ class Tile {
         return this;
     }
 
-    render(x, y, sizeX, sizeY) {
+    render(board, x, y, sizeX, sizeY) {
         board.imageSmoothingEnabled = false;
         board.drawImage(this.type.display, Math.floor(x), Math.floor(y), Math.ceil(sizeX), Math.ceil(sizeY));
         board.fillStyle = this.owner.color;
@@ -92,22 +83,15 @@ class Tile {
 }
 
 
-// Returns the tile you're hovering over
-function hoveredTile() {
-	let out = screenLocToGamePos(mouseX,mouseY);
-	return {x: Math.floor(out.x), y: Math.floor(out.y)}
-}
 
-function screenLocToGamePos(sX,sY) {
-	const box = gameCanvas.getBoundingClientRect();
+var tileTypes = {};
+var buildingTypes = {};
 
-	const relX = sX - box.left;
-	const relY = sY - box.top;
+tileTypes.GRASS = new TileType("grass");
+tileTypes.WATER = new TileType("water");
 
-	if (relX<0 || relY<0 || relX>gameCanvas.scrollWidth || relY>gameCanvas.scrollHeight) return null;
+buildingTypes.NOTHING = new BuildingType("nothing", false);
+buildingTypes.CAMPSITE = new BuildingType("capitols/capitol1", true);
 
-	const centerX = gameCanvas.width/2;
-	const centerY = gameCanvas.height/2;
 
-	return {x: ((relX-centerX)/tileSizeX)+currentX, y: ((relY-centerY)/tileSizeY)+currentY}
-}
+export { TileType, BuildingType, Building, Tile, tileTypes, buildingTypes };
