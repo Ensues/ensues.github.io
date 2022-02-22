@@ -20,17 +20,34 @@ p {
 	font-family:'Courier New';
 }
 
-.buttonContainer {
-	display:block;
+#buttonContainer {
 	text-align:center;
 }
 
 .gameButton {
-	width:315px;
-	height:75px;
+	display: inline-block;
+
+	color: #FFFFFF;
+	font-size: 200%;
+	text-align: center;
+	font-family:'Courier New';
+	text-decoration: none;
+
+	border-style: double;
+	border-color: #004477;
+	border-width: thick;
+
+	margin: 1%;
+	padding: 0.5%;
+	padding-left: 3%;
+	padding-right: 3%;
 }
 
-.mainBody {
+.gameButton:hover {
+	border-color: #116699;
+}
+
+#mainBody {
 	background-color: #3399CC;
 	width: 80%;
 	height: 90%;
