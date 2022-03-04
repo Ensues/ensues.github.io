@@ -15,6 +15,7 @@ class Room {
 class TileType {
     safeName: string;
     walkable: boolean;
+    image: HTMLImageElement;
 
     constructor(name: string, walkable: boolean = true) {
         this.safeName = name;
